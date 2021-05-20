@@ -1,7 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-
+import React, { Component } from "react";
 import { useState, useRef, useEffect } from 'react';
+import ST from "./Music/St.mp3"
 
 
 
@@ -17,10 +18,11 @@ const Canvas = () => {
   const [time, settime] = useState(0)
   const [timeron, settimeron] = useState(false)
   const [video, setVideo] = useState(null)
-  const [subtitle1, setsubtitle1] = useState('');
-  const [subtitle2, setsubtitle2] = useState('');
-  const [I1, setI1] = useState(1);
-  const [I2, setI2] = useState(1);
+  const [subtitle1, setsubtitle1] = useState('')
+  const [subtitle2, setsubtitle2] = useState('')
+  const [I1, setI1] = useState(1)
+  const [I2, setI2] = useState(1)
+  const [music, setmusic] = useState(null)
 
   const canvas = useRef(null)
 
@@ -32,6 +34,10 @@ const Canvas = () => {
   useEffect(() => {
     const selectedvideo = document.getElementById("video");
     setVideo(selectedvideo);
+  }, [])
+  useEffect(() => {
+    const selectedmusic = document.getElementById("ST");
+    setmusic(selectedmusic);
   }, [])
   useEffect(() => {
     if (image && canvas) {
@@ -55,7 +61,9 @@ const Canvas = () => {
           ctx.fillText(subtitle2.substr(0, I2), Xpos2, Ypos2)
           setI2((time - 3000) / ((8000 - 4000) / subtitle2.length))
         }
-      } else {
+      } else if(time>=8000){
+        video.pause();
+        music.pause();
         return
       }
       ctx.font = "60px Times New Roman"
@@ -63,6 +71,7 @@ const Canvas = () => {
     }
 
   }, [image, video, canvas, Text, Xpos1, Ypos1, Xpos2, Ypos2, time, I1, I2, subtitle1, subtitle2])
+
   const handleonClick = (event) => {
     console.log('Click!')
     if (timeron) {
@@ -70,12 +79,13 @@ const Canvas = () => {
       addInput(event.clientX, event.clientY)
       settimeron(false)
       video.pause();
+      music.pause();
     } else {
       settimeron(true)
       video.play();
+      music.play();
     }
   }
-
 
   function addInput(x, y) {
 
@@ -118,15 +128,20 @@ const Canvas = () => {
   function playbuttonClick() {
     settimeron(true);
     video.play();
+    music.play();
   }
   function pausebuttonClick() {
     settimeron(false);
     video.pause();
+    music.pause();
   }
   function stopbuttonClick() {
     settime(0);
     settimeron(false);
     video.currentTime = 0;
+    music.currentTime =0;
+    video.pause();
+    music.pause();
   }
 
   function fadeinout() {
@@ -195,6 +210,7 @@ const Canvas = () => {
       <div hidden>
         <video id="video" src="https://media.gettyimages.com/videos/goodlooking-young-woman-in-casual-clothing-is-painting-in-workroom-video-id1069900546" controls="true" autoplay="true" preload="true" />
       </div>
+      <audio id="ST" src={ST} />
     </div>
 
   )
