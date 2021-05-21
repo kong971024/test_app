@@ -10,17 +10,20 @@ import Login from './pages/Login.js';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import Menubar from './componets/Menubar'
-import { Container } from 'semantic-ui-react';
+import { AuthProvider} from './context/auth'
 
 function App(){
   return (   
-    
+    <AuthProvider>
       <Router>
+        
         <Menubar />
         <Route excat path="/home" component ={Home}/>
         <Route excat path="/login" component ={Login}/>
         <Route excat path="/register" component ={Register}/>
+      
       </Router>
+      </AuthProvider>
   );
 }
 export default App;
